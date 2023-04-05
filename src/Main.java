@@ -10,7 +10,7 @@ public class Main {
         manager.createSubTasks(2,new SubTask("Сказать слова прощания", "Молитву", "DONE"));
 
         System.out.println(manager.getAllTasks());
-       System.out.println(manager.getAllSubTask());
+        System.out.println(manager.getAllSubTask());
         System.out.println(manager.getAllEpic());
         System.out.println("Вывели все подзадачи");
         manager.updateSubTasks(new SubTask("Успокоить кота", "Ну кому-то надо это делать", "NEW"), 4);

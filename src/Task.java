@@ -6,7 +6,8 @@ public class Task {
 
 
     public Task(String name, String description, String status) {
-        this.id = TaskManager.idCounter++;
+        this.id = TaskManager.getIdCounter();
+        TaskManager.setIdCounter(id+1);
         this.name = name;
         this.description = description;
         this.status = status;

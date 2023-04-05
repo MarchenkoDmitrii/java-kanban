@@ -6,13 +6,21 @@ import java.util.Objects;
 
 public class TaskManager {
 //    Добавляем счетчик-идентификатор задач
-    public static int idCounter = 1;
+    private static int idCounter = 1;
 //    хэш-мап с задачами для внешнего использования
     protected HashMap<Integer, Task> tasks = new HashMap<>();
     //    хэш-мап с подзадачами для промежуточного накопления их, перед присваиванием их эпикам
     private final HashMap<Integer,SubTask> subTaskHashMap = new HashMap<>();
 //    Хэш-мапа эпиков для внешнего использования уже с подзадачами
     protected HashMap<Integer, Epic> epics = new HashMap<>();
+
+    public static int getIdCounter() {
+        return idCounter;
+    }
+
+    public static void setIdCounter(int idCounter) {
+        TaskManager.idCounter = idCounter;
+    }
 
     public Collection<Task> getAllTasks() {
         System.out.println("Задачи:");
@@ -94,11 +102,15 @@ public class TaskManager {
 
     }
     public void createSubTasks(int epicID,SubTask subTask) {
-        Epic epic = epics.get(epicID);
-        subTaskHashMap.put(subTask.id,subTask);
-        subTask.setEpicsID(epic.id);
-        epics.get(epicID).getSubTasks().add(subTask.id);
-        updateEpicStatus(subTask.getEpicsID());
+       if (epics.containsKey(epicID))
+        {
+            subTaskHashMap.put(subTask.id, subTask);
+            subTask.setEpicsID(epicID);
+            epics.get(epicID).getSubTasks().add(subTask.id);
+            updateEpicStatus(subTask.getEpicsID());
+        }else {
+           System.out.println("Эпика с ID: '" + epicID + "' не существует");
+       }
     }
 
     public void updateSubTasks(SubTask subTask, int id) {
