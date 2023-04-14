@@ -1,3 +1,10 @@
+import managers.Managers;
+import managers.TaskManager;
+import tasks.Epic;
+import tasks.StatusTask;
+import tasks.SubTask;
+import tasks.Task;
+
 public class Main {
     public static void main(String[] args) {
         TaskManager manager = Managers.getDefault();
@@ -21,8 +28,7 @@ public class Main {
         System.out.println(manager.getAllSubTasksByEpic(2));
         System.out.println(manager.getEpicById(2));
         System.out.println("Вывели эпик 2 и все его сабтаски");
-        //manager.removeSubTaskById(4);
-        //manager.removeAllSubTasks();
+
         System.out.println(manager.getEpicById(2));
         System.out.println(manager.getAllSubTasksByEpic(2));
         System.out.println("Вывели эпик 2 и все его сабтаски");
@@ -36,7 +42,6 @@ public class Main {
         System.out.println(manager.getTaskById(2));
         System.out.println(manager.getTaskById(3));
 
-        //manager.removeEpicById(3);
         manager.updateTask(new Task("Сходить в кино","Найти кинотеатр и нормальный фильм",StatusTask.NEW),5);
         System.out.println(manager.getAllTasks());
         System.out.println(manager.getAllSubTask());

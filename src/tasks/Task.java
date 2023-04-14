@@ -1,10 +1,12 @@
+package tasks;
+
+import managers.InMemoryTaskManager;
+
 public class Task {
-    protected int id;
-    protected String name;
-    protected String description;
-    protected StatusTask status;
-
-
+    private int id;
+    private String name;
+    private String description;
+    private StatusTask status;
 
     public Task(String name, String description, StatusTask status) {
         this.id = InMemoryTaskManager.getIdCounter();
@@ -14,14 +16,28 @@ public class Task {
         this.status = status;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
     public StatusTask getStatus() {
         return status;
     }
-
     public void setStatus(StatusTask status) {
         this.status = status;
     }
-
     @Override
     public String toString() {
         return "Task{" +

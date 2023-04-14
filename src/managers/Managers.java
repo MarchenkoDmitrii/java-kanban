@@ -1,4 +1,4 @@
-import java.util.*;
+package managers;
 
 public class Managers {
    public static HistoryManager getDefaultHistory(){

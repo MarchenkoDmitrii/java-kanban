@@ -1,3 +1,10 @@
+package managers;
+
+import tasks.Epic;
+import tasks.StatusTask;
+import tasks.SubTask;
+import tasks.Task;
+
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.ArrayList;
@@ -8,11 +15,11 @@ public class InMemoryTaskManager implements TaskManager {
     //    Добавляем счетчик-идентификатор задач
     private static int idCounter = 1;
     //    хэш-мап с задачами для внешнего использования
-    protected HashMap<Integer, Task> tasks = new HashMap<>();
+    private HashMap<Integer, Task> tasks = new HashMap<>();
     //    хэш-мап с подзадачами для промежуточного накопления их, перед присваиванием их эпикам
-    private final HashMap<Integer,SubTask> subTaskHashMap = new HashMap<>();
+    private HashMap<Integer, SubTask> subTaskHashMap = new HashMap<>();
     //    Хэш-мапа эпиков для внешнего использования уже с подзадачами
-    protected HashMap<Integer, Epic> epics = new HashMap<>();
+    private HashMap<Integer, Epic> epics = new HashMap<>();
 
 
     public static int getIdCounter() {
@@ -52,7 +59,7 @@ public class InMemoryTaskManager implements TaskManager {
                 epic.getSubTasks().remove(i);
             }
 //   Этот метод будет проверять статус Эпика каждый раз, когда происходит изменение числа сабтасков или их удаление
-            updateEpicStatus(epic.id);
+            updateEpicStatus(epic.getId());
         }
         subTaskHashMap.clear();
     }
@@ -82,24 +89,24 @@ public class InMemoryTaskManager implements TaskManager {
     }
     @Override
     public void createTask(Task task) {
-        tasks.put(task.id, task);
+        tasks.put(task.getId(), task);
     }
     @Override
     public void updateTask(Task task,int id) {
-        task.id = id;
+        task.setId(id);
         if (tasks.containsKey(id)) {
-            tasks.put(task.id, task);
+            tasks.put(task.getId(), task);
         }else System.out.println("Задачи с ID: '"+id+"' не существует");
     }
     @Override
     public void createEpic(Epic epic) {
 //      Делаем статус Эпика "NЕW" так как он только создан и при отсутствии сабтасков должен быть NEW
         epic.setStatus(StatusTask.NEW);
-        epics.put(epic.id, epic);
+        epics.put(epic.getId(), epic);
     }
     @Override
     public void updateEpic(Epic epic, int id) {
-        epic.id = id;
+        epic.setId(id);
 //        Так как мы меняем эпик, то из таблицы удалим все подзадачи, Эпик же другой!
         if (epics.containsKey(id)) {
             epics.put(id,epic);
@@ -113,9 +120,9 @@ public class InMemoryTaskManager implements TaskManager {
     public void createSubTasks(int epicID,SubTask subTask) {
         if (epics.containsKey(epicID))
         {
-            subTaskHashMap.put(subTask.id, subTask);
+            subTaskHashMap.put(subTask.getId(), subTask);
             subTask.setEpicsID(epicID);
-            epics.get(epicID).getSubTasks().add(subTask.id);
+            epics.get(epicID).getSubTasks().add(subTask.getId());
             updateEpicStatus(subTask.getEpicsID());
         }else {
             System.out.println("Эпика с ID: '" + epicID + "' не существует");
@@ -124,7 +131,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void updateSubTasks(SubTask subTask, int id) {
-        subTask.id = id;
+        subTask.setId(id);
 //        Проверяем мапу сабтасков на нужный ключ
         if (subTaskHashMap.containsKey(id)) {
 //                Присваиваем новому экземпляру нужный эпик
@@ -136,7 +143,7 @@ public class InMemoryTaskManager implements TaskManager {
                     epics.get(subTask.getEpicsID()).getSubTasks().remove(i);
                 }
             }
-            epics.get(subTask.getEpicsID()).getSubTasks().add(subTask.id);
+            epics.get(subTask.getEpicsID()).getSubTasks().add(subTask.getId());
             updateEpicStatus(subTask.getEpicsID());
         }else {
             System.out.println("Подзадачи с ID: '" + id + "' не существует");
@@ -208,10 +215,10 @@ public class InMemoryTaskManager implements TaskManager {
         }
 //        Цикл проходит по всем сабтаскам эпика и делает ложными булевые значения, если они отличаются от DONE или NEW
         for (Integer subTask : epic.getSubTasks()) {
-            if (!subTaskHashMap.get(subTask).status.equals(StatusTask.DONE)) {
+            if (!subTaskHashMap.get(subTask).getStatus().equals(StatusTask.DONE)) {
                 allSubTasksDone = false;
             }
-            if (!subTaskHashMap.get(subTask).status.equals(StatusTask.DONE)) {
+            if (!subTaskHashMap.get(subTask).getStatus().equals(StatusTask.DONE)) {
                 allSubTasksNew = false;
             }
         }
