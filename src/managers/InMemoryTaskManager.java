@@ -1,10 +1,8 @@
 package managers;
-
 import tasks.Epic;
 import tasks.StatusTask;
 import tasks.SubTask;
 import tasks.Task;
-
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.ArrayList;
@@ -12,6 +10,7 @@ import java.util.Objects;
 
 
 public class InMemoryTaskManager implements TaskManager {
+
     //    Добавляем счетчик-идентификатор задач
     private static int idCounter = 1;
     //    хэш-мап с задачами для внешнего использования
@@ -21,11 +20,9 @@ public class InMemoryTaskManager implements TaskManager {
     //    Хэш-мапа эпиков для внешнего использования уже с подзадачами
     private HashMap<Integer, Epic> epics = new HashMap<>();
 
-
     public static int getIdCounter() {
         return idCounter;
     }
-
     public static void setIdCounter(int idCounter) {
         InMemoryTaskManager.idCounter = idCounter;
     }
@@ -79,12 +76,9 @@ public class InMemoryTaskManager implements TaskManager {
     }
     @Override
     public Epic getEpicById(int id) {
-
-        for (Integer epic: epics.keySet()) {
-            if(epic == id){
-                return epics.get(id);
+        if(epics.containsKey(id)){
+            return epics.get(id);
             }
-        }
         return null;
     }
     @Override
@@ -115,7 +109,6 @@ public class InMemoryTaskManager implements TaskManager {
             System.out.println("Эпика с ID: '" + id + "' не существует");
         }
     }
-
     @Override
     public void createSubTasks(int epicID,SubTask subTask) {
         if (epics.containsKey(epicID))
@@ -128,7 +121,6 @@ public class InMemoryTaskManager implements TaskManager {
             System.out.println("Эпика с ID: '" + epicID + "' не существует");
         }
     }
-
     @Override
     public void updateSubTasks(SubTask subTask, int id) {
         subTask.setId(id);
@@ -149,7 +141,6 @@ public class InMemoryTaskManager implements TaskManager {
             System.out.println("Подзадачи с ID: '" + id + "' не существует");
         }
     }
-
     @Override
     public void removeTaskById(int id) {
         if (tasks.containsKey(id)) {
@@ -159,7 +150,6 @@ public class InMemoryTaskManager implements TaskManager {
         }
 
     }
-
     @Override
     public void removeEpicById(int id) {
         if (epics.containsKey(id)) {
@@ -168,7 +158,6 @@ public class InMemoryTaskManager implements TaskManager {
             System.out.println( "Эпика с ID: '"+id+"' не существует");
         }
     }
-
     @Override
     public void removeSubTaskById(int id) {
         if (subTaskHashMap.containsKey(id)) {
@@ -184,7 +173,6 @@ public class InMemoryTaskManager implements TaskManager {
             updateEpicStatus(id);
         }
     }
-
     @Override
     public ArrayList<SubTask> getAllSubTasksByEpic(int epicId) {
         Epic epic = epics.get(epicId);
@@ -201,7 +189,6 @@ public class InMemoryTaskManager implements TaskManager {
         return subTasks;
 
     }
-
     @Override
     public void updateEpicStatus(int id) {
 //        Создадим две переменные для проверки статусов у сабтасков
@@ -234,7 +221,6 @@ public class InMemoryTaskManager implements TaskManager {
         }
 
     }
-
     @Override
     public String toString() {
         return "TaskManager{" +
@@ -243,7 +229,6 @@ public class InMemoryTaskManager implements TaskManager {
                 ", subTaskHashMap=" + subTaskHashMap +
                 '}';
     }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -251,7 +236,6 @@ public class InMemoryTaskManager implements TaskManager {
         InMemoryTaskManager that = (InMemoryTaskManager) o;
         return tasks.equals(that.tasks) && subTaskHashMap.equals(that.subTaskHashMap) && epics.equals(that.epics);
     }
-
     @Override
     public int hashCode() {
         return Objects.hash(tasks, subTaskHashMap, epics);

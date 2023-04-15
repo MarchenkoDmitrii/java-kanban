@@ -25,19 +25,19 @@ public class Main {
         System.out.println("Вывели все подзадачи");
         manager.updateSubTasks(new SubTask("Успокоить кота", "Ну кому-то надо это делать", StatusTask.NEW), 4);
         manager.updateEpic(new Epic("Отпуск", "Уехать далеко и надолго", StatusTask.NEW), 3);
-        System.out.println(manager.getAllSubTasksByEpic(2));
-        System.out.println(manager.getEpicById(2));
+        System.out.println(manager.getAllSubTasksByEpic(4));
+        System.out.println(manager.getEpicById(4));
         System.out.println("Вывели эпик 2 и все его сабтаски");
 
-        System.out.println(manager.getEpicById(2));
-        System.out.println(manager.getAllSubTasksByEpic(2));
+        System.out.println(manager.getEpicById(4));
+        System.out.println(manager.getAllSubTasksByEpic(4));
         System.out.println("Вывели эпик 2 и все его сабтаски");
         System.out.println(manager.getAllEpic());
         System.out.println(manager.getAllSubTask());
 
 
-        System.out.println(manager.getEpicById(2));
-        System.out.println(manager.getSubTaskById(4));
+        System.out.println(manager.getEpicById(4));
+        System.out.println(manager.getSubTaskById(8));
         System.out.println(manager.getTaskById(1));
         System.out.println(manager.getTaskById(2));
         System.out.println(manager.getTaskById(3));

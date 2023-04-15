@@ -1,9 +1,7 @@
 package managers;
-
 import tasks.Epic;
 import tasks.SubTask;
 import tasks.Task;
-
 import java.util.Collection;
 import java.util.ArrayList;
 

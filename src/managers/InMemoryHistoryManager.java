@@ -1,12 +1,10 @@
 package managers;
-
 import tasks.Task;
-
 import java.util.LinkedList;
-
 
 public class InMemoryHistoryManager implements HistoryManager{
     private static LinkedList<Task> history = new LinkedList<>();
+
     @Override
     public void add(Task task) {
         if (history.size() == 10){
@@ -18,8 +16,6 @@ public class InMemoryHistoryManager implements HistoryManager{
     public LinkedList<Task> getHistory(){
         return  history;
     }
-
-
     @Override
     public String toString() {
         return "InMemoryHistoryManager{" +

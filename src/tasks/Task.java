@@ -1,8 +1,8 @@
 package tasks;
-
 import managers.InMemoryTaskManager;
 
 public class Task {
+
     private int id;
     private String name;
     private String description;
@@ -19,19 +19,15 @@ public class Task {
     public void setId(int id) {
         this.id = id;
     }
-
     public int getId() {
         return id;
     }
-
     public String getName() {
         return name;
     }
-
     public String getDescription() {
         return description;
     }
-
     public StatusTask getStatus() {
         return status;
     }

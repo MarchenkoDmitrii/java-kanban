@@ -1,5 +1,4 @@
 package tasks;
-
 import java.util.ArrayList;
 
 public class Epic extends Task {
@@ -11,11 +10,10 @@ public class Epic extends Task {
         this.setStatus(status);
         subTasks = new ArrayList<>();
     }
+
     public ArrayList<Integer> getSubTasks() {
         return subTasks;
     }
-
-
     @Override
     public String toString() {
         return "Epic{" +
