@@ -1,11 +1,13 @@
 package managers;
 
-public class Node<E> {
-    public E data;
-    public Node<E> nextElement;
-    public Node<E> previousElement;
+import tasks.Task;
 
-    public Node(E v, Node<E> next, Node<E> previous) {
+public class Node<Task>{
+    public Task data;
+    public Node<Task> nextElement;
+    public Node<Task> previousElement;
+
+    public Node(Task v, Node<Task> next, Node<Task> previous) {
         data = v;
         nextElement = next;
         if (nextElement != null)

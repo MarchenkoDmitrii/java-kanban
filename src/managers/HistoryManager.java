@@ -3,9 +3,10 @@ import tasks.Task;
 import java.util.List;
 
 
-public interface HistoryManager {
+public interface HistoryManager<T extends Task> {
 
     void add(Task task);
+
     void remove(int id);
     List<Task> getHistory();
 }
