@@ -10,4 +10,9 @@ public class Managers {
         return new InMemoryTaskManager() {
         };
     }
+
+    public static FileBackedTasksManager getFile(){
+        // Возвращаем объект типа InMemoryHistoryManager
+        return new FileBackedTasksManager();
+    }
 }

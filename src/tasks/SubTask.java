@@ -1,20 +1,30 @@
 package tasks;
 
 public class SubTask extends Task {
-    // переменная с идентификатором Эпика, в который входит данная подзадачи
-    private int epicsID;
+    // переменная с идентификатором Эпика, в который входит данная подзадача
+    static private int epicsID;
+    private TypeTask typeTask;
 
     public SubTask(String name, String description, StatusTask status) {
         super(name, description,status);
         this.setStatus(status);
+        this.typeTask = TypeTask.SubTask;
+    }
+    public SubTask(int id, String name, String description, StatusTask status,Integer epicID) {
+        super(id);
+        this.setName(name);
+        this.setDescription(description);
+        this.setId(epicsID);
+        this.setStatus(status);
+        this.epicsID = epicID;
     }
 
-    public int getEpicsID() {
+    static public int getEpicsID() {
         return epicsID;
     }
-    public void setEpicsID(int epicsID) {
+    static public void setEpicsID(int epicsID) {
 
-        this.epicsID = epicsID;
+        SubTask.epicsID = epicsID;
     }
     @Override
     public String toString() {

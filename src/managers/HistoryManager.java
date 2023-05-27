@@ -3,7 +3,7 @@ import tasks.Task;
 import java.util.List;
 
 
-public interface HistoryManager<T extends Task> {
+public interface HistoryManager {
 
     void add(Task task);
 

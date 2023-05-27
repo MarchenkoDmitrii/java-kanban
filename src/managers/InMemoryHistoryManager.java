@@ -6,7 +6,7 @@ import java.util.*;
 
 public class InMemoryHistoryManager implements HistoryManager {
     // Хэшмап с узлами и идентификаторами задач
-    private static Map<Integer, Node> idNode = new HashMap<>();
+    protected static Map<Integer, Node> idNode = new HashMap<>();
     private static Node<Task> head;
     private static Node<Task> tail;
 
@@ -51,13 +51,14 @@ public class InMemoryHistoryManager implements HistoryManager {
     public ArrayList<Task> getTask() {
         // Создадим список и два узла: текущий(изначально головно) и хвост
         ArrayList<Task> tasks = new ArrayList<>();
+        if (head == null) return null;
+
         Node<Task> current = head;
-        int count = 0;
+
         // Пока счетчик не равен размеру, заполняем Arraylist
-        while (count != idNode.size()) {
+        while (current != null) {
             tasks.add(current.data);
             current = current.nextElement;
-            count++;
         }
         return tasks;
     }
@@ -87,6 +88,6 @@ public class InMemoryHistoryManager implements HistoryManager {
             del.previousElement.nextElement = del.nextElement;
         }
 
-        return;
     }
+
 }

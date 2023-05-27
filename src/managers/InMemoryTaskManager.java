@@ -10,11 +10,11 @@ public class InMemoryTaskManager implements TaskManager {
     //    Добавляем счетчик-идентификатор задач
     private static int idCounter = 1;
     //    хэш-мап с задачами для внешнего использования
-    private HashMap<Integer, Task> tasks = new HashMap<>();
+    HashMap<Integer, Task> tasks = new HashMap<>();
     //    хэш-мап с подзадачами для промежуточного накопления их, перед присваиванием их эпикам
-    private HashMap<Integer, SubTask> subTaskHashMap = new HashMap<>();
+    HashMap<Integer, SubTask> subTaskHashMap = new HashMap<>();
     //    Хэш-мапа эпиков для внешнего использования уже с подзадачами
-    private HashMap<Integer, Epic> epics = new HashMap<>();
+    HashMap<Integer, Epic> epics = new HashMap<>();
 
     public static int getIdCounter() {
         return idCounter;
@@ -41,11 +41,11 @@ public class InMemoryTaskManager implements TaskManager {
         return subTaskList;
     }
     @Override
-    public void removeAllTasks() {
+    public void removeAllTasks() throws ManagerSaveException {
         tasks.clear();
     }
     @Override
-    public void removeAllSubTasks() {
+    public void removeAllSubTasks() throws ManagerSaveException {
         for (Integer id : epics.keySet()) {
             Epic epic = epics.get(id);
             for (int i = 0; i < epic.getSubTasks().size(); i++) {
@@ -57,22 +57,22 @@ public class InMemoryTaskManager implements TaskManager {
         subTaskHashMap.clear();
     }
     @Override
-    public void removeAllEpics() {
+    public void removeAllEpics() throws ManagerSaveException {
         epics.clear();
         subTaskHashMap.clear();
     }
     @Override
-    public Task getTaskById(int id) {
+    public Task getTaskById(int id) throws ManagerSaveException {
         Managers.getDefaultHistory().add(tasks.getOrDefault(id,null));
         return tasks.getOrDefault(id, null);
     }
     @Override
-    public SubTask getSubTaskById(int id) {
+    public SubTask getSubTaskById(int id) throws ManagerSaveException {
         Managers.getDefaultHistory().add(subTaskHashMap.getOrDefault(id,null));
         return subTaskHashMap.getOrDefault(id, null);
     }
     @Override
-    public Epic getEpicById(int id) {
+    public Epic getEpicById(int id) throws ManagerSaveException {
         if(epics.containsKey(id)){
             Managers.getDefaultHistory().add(epics.getOrDefault(id,null));
             return epics.get(id);
@@ -80,24 +80,24 @@ public class InMemoryTaskManager implements TaskManager {
         return null;
     }
     @Override
-    public void createTask(Task task) {
+    public void createTask(Task task) throws ManagerSaveException {
         tasks.put(task.getId(), task);
     }
     @Override
-    public void updateTask(Task task,int id) {
+    public void updateTask(Task task,int id) throws ManagerSaveException {
         task.setId(id);
         if (tasks.containsKey(id)) {
             tasks.put(task.getId(), task);
         }else System.out.println("Задачи с ID: '"+id+"' не существует");
     }
     @Override
-    public void createEpic(Epic epic) {
+    public void createEpic(Epic epic) throws ManagerSaveException {
 //      Делаем статус Эпика "NЕW" так как он только создан и при отсутствии сабтасков должен быть NEW
         epic.setStatus(StatusTask.NEW);
         epics.put(epic.getId(), epic);
     }
     @Override
-    public void updateEpic(Epic epic, int id) {
+    public void updateEpic(Epic epic, int id) throws ManagerSaveException {
         epic.setId(id);
 //        Так как мы меняем эпик, то из таблицы удалим все подзадачи, Эпик же другой!
         if (epics.containsKey(id)) {
@@ -108,7 +108,7 @@ public class InMemoryTaskManager implements TaskManager {
         }
     }
     @Override
-    public void createSubTasks(int epicID,SubTask subTask) {
+    public void createSubTasks(int epicID,SubTask subTask) throws ManagerSaveException {
         if (epics.containsKey(epicID))
         {
             subTaskHashMap.put(subTask.getId(), subTask);
@@ -120,7 +120,7 @@ public class InMemoryTaskManager implements TaskManager {
         }
     }
     @Override
-    public void updateSubTasks(SubTask subTask, int id) {
+    public void updateSubTasks(SubTask subTask, int id) throws ManagerSaveException {
         subTask.setId(id);
 //        Проверяем мапу сабтасков на нужный ключ
         if (subTaskHashMap.containsKey(id)) {
@@ -140,7 +140,7 @@ public class InMemoryTaskManager implements TaskManager {
         }
     }
     @Override
-    public void removeTaskById(int id) {
+    public void removeTaskById(int id) throws ManagerSaveException {
         if (tasks.containsKey(id)) {
             Managers.getDefaultHistory().remove(tasks.getOrDefault(id,null).getId());
             tasks.remove(id);
@@ -150,7 +150,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     }
     @Override
-    public void removeEpicById(int id) {
+    public void removeEpicById(int id) throws ManagerSaveException {
         if (epics.containsKey(id)) {
             Managers.getDefaultHistory().remove(epics.get(id).getId());
             for (Integer subTask : epics.get(id).getSubTasks()) {
@@ -162,7 +162,7 @@ public class InMemoryTaskManager implements TaskManager {
         }
     }
     @Override
-    public void removeSubTaskById(int id) {
+    public void removeSubTaskById(int id) throws ManagerSaveException {
         if (subTaskHashMap.containsKey(id)) {
             Managers.getDefaultHistory().remove(subTaskHashMap.getOrDefault(id,null).getId());
             subTaskHashMap.remove(id);
@@ -194,7 +194,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     }
     @Override
-    public void updateEpicStatus(int id) {
+    public void updateEpicStatus(int id) throws ManagerSaveException {
 //        Создадим две переменные для проверки статусов у сабтасков
         boolean allSubTasksDone = true;
         boolean allSubTasksNew = true;
