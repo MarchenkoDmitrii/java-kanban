@@ -106,11 +106,13 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
         save();
         return history;
     }
+
     // Метод преобразования задачи в строку
     public static String toString(Task task) {
 
         String out;
-    // Т.к. у в файле у нас имеется две величны строк, то разобьем их условием чтобы не уйти в аутофстек
+
+    // Т.к. у в файле у нас имеется две величины строк, то разобьем их условием чтобы не уйти в аутофстек
         if (task.getTypeTask().equals(TypeTask.SubTask)){
             out = String.format("%d,%s,%s,%S,%s,%d", task.getId(),task.getTypeTask(), task.getName(),
                    task.getStatus(), task.getDescription(),SubTask.getEpicsID());
@@ -120,12 +122,14 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
         }
         return out;
     }
+
     // Метод преобразования строки в задачу
     public static Task fromString(String value) {
 
         String[] stringsTask = value.split(",");
         Task task;
-        // Точно такое же условие как и в строке выше
+
+        // Точно такое же условие как и в методе выше
         if (!TypeTask.valueOf(stringsTask[1]).equals(TypeTask.SubTask)) {
             // Для Task были созданы новые конструкторы, которые отвечают только за запись/чтение из файла
             task = new Task(Integer.parseInt(stringsTask[0]), stringsTask[2], stringsTask[4], StatusTask.valueOf(stringsTask[3]),
@@ -137,12 +141,13 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
         }
         return task;
     }
+
     // метод преобразования Истории в строку целых чисел
     public static String historyToString(HistoryManager historyManager) {
 
         StringBuilder str = new StringBuilder();
         List<Task> history = historyManager.getHistory();
-        // это условние нужно для того чтобы когда метод Save использовался в создании задач, то не выскакивал ошибка нуля
+        // это условие нужно для того чтобы метод Save использовался в создании задач, то не выскакивала ошибка нуля
         if (history == null) return "";
 
         for (Task task : history) {
@@ -152,6 +157,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
         str = str.delete(str.length()-1,str.length());
         return new String(str);
     }
+
     // Метод преобразования Истории из строки
     public static List<Integer> historyFromString(String value) {
         String[] historyStr = value.split(",");
@@ -162,12 +168,15 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
         }
         return history;
     }
-    // метод сохраниения всех добавленных и просмотренных задач
+
+    // метод сохранения всех добавленных и просмотренных задач
     public void save() throws ManagerSaveException {
         try {
+
             // Почему в т.з. file? Приходится полный путь писать...
             Writer fileWriter = new FileWriter("C:\\Users\\Angelina\\dev\\java-kanban\\src\\Task.csv");
             fileWriter.write("id,type,name,status,description,epic\n");
+
             // Циклы заполнения файла созданными задачами
             for (Integer integer : tasks.keySet()) {
                 fileWriter.write(toString(tasks.get(integer))+"\n");
@@ -178,56 +187,62 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
             for (Integer integer : subTaskHashMap.keySet()) {
                 fileWriter.write(toString(subTaskHashMap.get(integer))+"\n");
             }
+
             // Отступ и строка истории просмотра
             fileWriter.write("\n");
             fileWriter.write(historyToString(Managers.getDefaultHistory()));
             fileWriter.close();
+
         } catch (IOException e) {
-            throw new ManagerSaveException("вфы");
+            throw new ManagerSaveException("Ошибка чтения файла");
         }
-
     }
+
     // Метод загрузки задач из бекапа
-    static FileBackedTasksManager loadFromFile(File file) throws IOException {
+    static FileBackedTasksManager loadFromFile(File file) throws ManagerSaveException {
+        try {
+            FileReader reader = new FileReader(file);
+            BufferedReader br = new BufferedReader(reader);
+            FileBackedTasksManager loadFromFile = new FileBackedTasksManager();
+            HistoryManager historyManager = new InMemoryHistoryManager();
 
-        FileReader reader = new FileReader(file);
-        BufferedReader br = new BufferedReader(reader);
-        FileBackedTasksManager loadFromFile = new FileBackedTasksManager();
-        HistoryManager historyManager = new InMemoryHistoryManager();
-        // Эта мапа нужна для сохранения всех задач в типе Task, так более удобно выгружать историю
-        HashMap<Integer, Task> allTasks = new HashMap<>();
-        br.readLine();
+            // Эта мапа нужна для сохранения всех задач в типе Task, так более удобно выгружать историю
+            HashMap<Integer, Task> allTasks = new HashMap<>();
+            br.readLine();
 
-        while (br.ready()) {
+            while (br.ready()) {
 
-            String str = br.readLine();
-            // ловим пустую строку между задачами и историей
-            if (str.equals("")) break;
-            Task task = fromString(str);
-            allTasks.put(task.getId(), task);
-            // Разбиваем задачи по типам.
-            if (task.getTypeTask() == TypeTask.Task) {
-                loadFromFile.tasks.put(task.getId(), task);
-                // добавляем задачу в ту хэш-мапу, которая соответствует типу задачи
-            } else if (task.getTypeTask() == TypeTask.Epic) {
-                Epic epic = new Epic(task.getId(), task.getName(), task.getDescription(), task.getStatus());
-                        epic.setId(task.getId());
-                loadFromFile.epics.put(epic.getId(), epic);
+                String str = br.readLine();
+                // ловим пустую строку между задачами и историей
+                if (str.equals("")) break;
+                Task task = fromString(str);
+                allTasks.put(task.getId(), task);
+                // Разбиваем задачи по типам.
+                if (task.getTypeTask() == TypeTask.Task) {
+                    loadFromFile.tasks.put(task.getId(), task);
+                    // добавляем задачу в ту хэш-мапу, которая соответствует типу задачи
+                } else if (task.getTypeTask() == TypeTask.Epic) {
+                    Epic epic = new Epic(task.getId(), task.getName(), task.getDescription(), task.getStatus());
+                    epic.setId(task.getId());
+                    loadFromFile.epics.put(epic.getId(), epic);
 
-            } else if (task.getTypeTask() == TypeTask.SubTask) {
-                SubTask subTask = new SubTask(task.getId(), task.getName(), task.getDescription(), task.getStatus(),
-                        SubTask.getEpicsID());
-                loadFromFile.epics.get(SubTask.getEpicsID()).getSubTasks().add(subTask.getId());
-                subTask.setId(task.getId());
-                loadFromFile.subTaskHashMap.put(subTask.getId(), subTask);
+                } else if (task.getTypeTask() == TypeTask.SubTask) {
+                    SubTask subTask = new SubTask(task.getId(), task.getName(), task.getDescription(), task.getStatus(),
+                            SubTask.getEpicsID());
+                    loadFromFile.epics.get(SubTask.getEpicsID()).getSubTasks().add(subTask.getId());
+                    subTask.setId(task.getId());
+                    loadFromFile.subTaskHashMap.put(subTask.getId(), subTask);
+                }
             }
-        }
-        List<Integer> history = historyFromString(br.readLine());
-        for (Integer integer : history) {
+            List<Integer> history = historyFromString(br.readLine());
+            for (Integer integer : history) {
                 historyManager.add(allTasks.get(integer));
+            }
+            reader.close();
+            return loadFromFile;
+        }catch (IOException e){
+            throw new ManagerSaveException("Ошибка чтения файла");
         }
-        reader.close();
-        return loadFromFile;
     }
     public static void main(String[] args) throws IOException {
         FileBackedTasksManager file = new FileBackedTasksManager();
