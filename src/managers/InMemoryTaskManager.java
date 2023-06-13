@@ -1,26 +1,39 @@
 package managers;
 import tasks.*;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.ArrayList;
-import java.util.Objects;
+
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class InMemoryTaskManager implements TaskManager {
 
     //    Добавляем счетчик-идентификатор задач
     private static int idCounter = 1;
     //    хэш-мап с задачами для внешнего использования
-    HashMap<Integer, Task> tasks = new HashMap<>();
+    public static  HashMap<Integer, Task> tasks = new HashMap<>();
     //    хэш-мап с подзадачами для промежуточного накопления их, перед присваиванием их эпикам
-    HashMap<Integer, SubTask> subTaskHashMap = new HashMap<>();
+    public static HashMap<Integer, SubTask> subTaskHashMap = new HashMap<>();
     //    Хэш-мапа эпиков для внешнего использования уже с подзадачами
-    HashMap<Integer, Epic> epics = new HashMap<>();
+    public static HashMap<Integer, Epic> epics = new HashMap<>();
 
     public static int getIdCounter() {
         return idCounter;
     }
     public static void setIdCounter(int idCounter) {
         InMemoryTaskManager.idCounter = idCounter;
+    }
+    public void setEpicTime(Epic epic){
+
+        epic.setStartTime(getAllSubTasksByEpic(epic.getId()).stream()
+                .map(SubTask::getStartTime)
+                .filter(Objects::nonNull)
+                .min(Comparator.naturalOrder())
+                .orElse(null));
+        epic.setDuration(getAllSubTasksByEpic(epic.getId()).stream()
+                .filter(duration -> !(duration.getDuration() == null))
+                .mapToLong(SubTask::getDuration)
+                .sum());
     }
     @Override
     public Collection<Task> getAllTasks() {
@@ -63,12 +76,14 @@ public class InMemoryTaskManager implements TaskManager {
     }
     @Override
     public Task getTaskById(int id) throws ManagerSaveException {
-        Managers.getDefaultHistory().add(tasks.getOrDefault(id,null));
+        if (tasks.getOrDefault(id, null) != null)
+            Managers.getDefaultHistory().add(tasks.getOrDefault(id,null));
         return tasks.getOrDefault(id, null);
     }
     @Override
     public SubTask getSubTaskById(int id) throws ManagerSaveException {
-        Managers.getDefaultHistory().add(subTaskHashMap.getOrDefault(id,null));
+        if (subTaskHashMap.getOrDefault(id,null) != null)
+            Managers.getDefaultHistory().add(subTaskHashMap.getOrDefault(id,null));
         return subTaskHashMap.getOrDefault(id, null);
     }
     @Override
@@ -209,7 +224,7 @@ public class InMemoryTaskManager implements TaskManager {
             if (!subTaskHashMap.get(subTask).getStatus().equals(StatusTask.DONE)) {
                 allSubTasksDone = false;
             }
-            if (!subTaskHashMap.get(subTask).getStatus().equals(StatusTask.DONE)) {
+            if (!subTaskHashMap.get(subTask).getStatus().equals(StatusTask.NEW)) {
                 allSubTasksNew = false;
             }
         }
@@ -220,7 +235,7 @@ public class InMemoryTaskManager implements TaskManager {
             epic.setStatus(StatusTask.NEW);
         }
 //        Если оба булевы значение ложь, то Эпик будет со статусом "В_РАБОТЕ"
-        if(!(allSubTasksDone)||(allSubTasksNew)){
+        if((!allSubTasksDone)&&(!allSubTasksNew)){
             epic.setStatus(StatusTask.IN_PROGRESS);
         }
     }
