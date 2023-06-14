@@ -203,7 +203,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
     public void save() throws ManagerSaveException {
         try {
 
-            Writer fileWriter = new FileWriter("C:\\Users\\Angelina\\dev\\java-kanban\\src\\Task.csv");
+            Writer fileWriter = new FileWriter("C:\\Users\\Angelina\\dev\\java-kanban\\src\\Test\\resources\\Task.csv");
             fileWriter.write("id, type, name, status, description, duration, startTime, epic\n");
 
             for (HashMap<Integer, ? extends Task> map : Arrays.asList(tasks, epics, subTaskHashMap)) {
@@ -288,7 +288,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
         file.getTaskById(1);
         file.getEpicById(3);
         file.getSubTaskById(5);
-        File file1 = new File("C:\\Users\\Angelina\\dev\\java-kanban\\src\\Task.csv");
+        File file1 = new File("C:\\Users\\Angelina\\dev\\java-kanban\\src\\Test\\resources\\Task.csv");
         FileBackedTasksManager fileBackedTasksManager = loadFromFile(file1);
         System.out.println(Managers.getDefaultHistory().getHistory());
         System.out.println("");
