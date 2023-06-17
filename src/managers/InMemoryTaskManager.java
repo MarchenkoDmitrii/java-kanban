@@ -1,10 +1,7 @@
 package managers;
 import tasks.*;
 
-import java.time.Duration;
-import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class InMemoryTaskManager implements TaskManager {
 
@@ -95,8 +92,10 @@ public class InMemoryTaskManager implements TaskManager {
         return null;
     }
     @Override
-    public void createTask(Task task) throws ManagerSaveException {
+    public Task createTask(Task task) throws ManagerSaveException {
+        task.setId(idCounter++);
         tasks.put(task.getId(), task);
+        return task;
     }
     @Override
     public void updateTask(Task task,int id) throws ManagerSaveException {
@@ -106,10 +105,12 @@ public class InMemoryTaskManager implements TaskManager {
         }else System.out.println("Задачи с ID: '"+id+"' не существует");
     }
     @Override
-    public void createEpic(Epic epic) throws ManagerSaveException {
+    public Epic createEpic(Epic epic) throws ManagerSaveException {
+        epic.setId(idCounter++);
 //      Делаем статус Эпика "NЕW" так как он только создан и при отсутствии сабтасков должен быть NEW
         epic.setStatus(StatusTask.NEW);
         epics.put(epic.getId(), epic);
+        return  epic;
     }
     @Override
     public void updateEpic(Epic epic, int id) throws ManagerSaveException {
@@ -123,16 +124,17 @@ public class InMemoryTaskManager implements TaskManager {
         }
     }
     @Override
-    public void createSubTasks(int epicID,SubTask subTask) throws ManagerSaveException {
-        if (epics.containsKey(epicID))
+    public SubTask createSubTasks(SubTask subTask) throws ManagerSaveException {
+        if (epics.containsKey(subTask.getEpicsID()))
         {
+            subTask.setId(idCounter++);
             subTaskHashMap.put(subTask.getId(), subTask);
-            subTask.setEpicsID(epicID);
-            epics.get(epicID).getSubTasks().add(subTask.getId());
+            epics.get(subTask.getEpicsID()).getSubTasks().add(subTask.getId());
             updateEpicStatus(subTask.getEpicsID());
         }else {
-            System.out.println("Эпика с ID: '" + epicID + "' не существует");
+            System.out.println("Эпика с ID: '" + subTask.getEpicsID() + "' не существует");
         }
+        return subTask;
     }
     @Override
     public void updateSubTasks(SubTask subTask, int id) throws ManagerSaveException {

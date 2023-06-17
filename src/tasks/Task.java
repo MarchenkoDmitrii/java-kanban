@@ -7,17 +7,16 @@ import java.util.Objects;
 
 public class Task {
 
+    public Integer epicId;
     private int id;
     private String name;
     private String description;
     private StatusTask status;
     private TypeTask typeTask;
     private  Long duration;
-    private LocalDateTime startTime;
+    protected LocalDateTime startTime;
 
     public Task(String name, String description) {
-        this.id = InMemoryTaskManager.getIdCounter();
-        InMemoryTaskManager.setIdCounter(id+1);
         this.name = name;
         this.description = description;
     }
@@ -42,8 +41,6 @@ public class Task {
     }
 
     public Task(String name, String description, StatusTask status, Long duration, String startTime) {
-        this.id = InMemoryTaskManager.getIdCounter();
-        InMemoryTaskManager.setIdCounter(id+1);
         this.name = name;
         this.description = description;
         this.status = status;
@@ -71,7 +68,7 @@ public class Task {
         this.duration = duration;
         this.startTime = Objects.equals(startTime, "") ?
                 null : LocalDateTime.parse(startTime, DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"));
-        SubTask.setEpicsID(epicId);
+        this.epicId = epicId;
     }
 
     public Task(int id) {
@@ -93,8 +90,6 @@ public class Task {
     }
 
     public Task(String name, String description, StatusTask status) {
-        this.id = InMemoryTaskManager.getIdCounter();
-        InMemoryTaskManager.setIdCounter(id+1);
         this.name = name;
         this.description = description;
         this.status = status;

@@ -4,10 +4,11 @@ import java.time.LocalDateTime;
 
 public class SubTask extends Task {
     // переменная с идентификатором Эпика, в который входит данная подзадача
-    static private int epicsID;
+     private int epicsID;
 
-    public SubTask(String name, String description, StatusTask status, Long duration, String startTime) {
+    public SubTask(String name, String description, StatusTask status, Long duration, String startTime, Integer epicID) {
         super(name, description,status, duration, startTime);
+        setEpicsID(epicID);
         this.setStatus(status);
         this.setTypeTask(TypeTask.valueOf(this.getClass().getSimpleName()));
     }
@@ -15,22 +16,23 @@ public class SubTask extends Task {
         super(id,duration,startTime);
         this.setName(name);
         this.setDescription(description);
-        this.setId(epicsID);
+        this.setId(id);
         this.setStatus(status);
-        epicsID = epicID;
+        setEpicsID(epicID);
     }
 
-    public SubTask(String name, String description, StatusTask status) {
+    public SubTask(String name, String description, StatusTask status, int epicsID) {
         super(name, description, status);
+        setEpicsID(epicsID);
         this.setDuration(super.getDuration());
         this.setTypeTask(TypeTask.valueOf(this.getClass().getSimpleName()));
     }
 
-    static public int getEpicsID() {
+    public int getEpicsID() {
         return epicsID;
     }
-    static public void setEpicsID(int epicsID) {
-        SubTask.epicsID = epicsID;
+     public void setEpicsID(int epicsID) {
+        this.epicsID = epicsID;
     }
 
     @Override

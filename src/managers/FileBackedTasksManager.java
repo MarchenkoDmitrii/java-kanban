@@ -3,7 +3,6 @@ package managers;
 import tasks.*;
 
 import java.io.*;
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -33,9 +32,10 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
     }
 
     @Override
-    public void createTask(Task task) throws ManagerSaveException {
+    public Task createTask(Task task) throws ManagerSaveException {
         super.createTask(task);
         save();
+        return task;
     }
 
     @Override
@@ -45,9 +45,10 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
     }
 
     @Override
-    public void createEpic(Epic epic) throws ManagerSaveException {
+    public Epic createEpic(Epic epic) throws ManagerSaveException {
         super.createEpic(epic);
         save();
+        return epic;
     }
 
     @Override
@@ -57,16 +58,17 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
     }
 
     @Override
-    public void createSubTasks(int epicID, SubTask subTask) throws ManagerSaveException {
-        super.createSubTasks(epicID, subTask);
-        super.setEpicTime(epics.get(SubTask.getEpicsID()));
+    public SubTask createSubTasks(SubTask subTask) throws ManagerSaveException {
+        super.createSubTasks(subTask);
+        super.setEpicTime(epics.get(subTask.getEpicsID()));
         save();
+        return subTask;
     }
 
     @Override
     public void updateSubTasks(SubTask subTask, int id) throws ManagerSaveException {
         super.updateSubTasks(subTask, id);
-        super.setEpicTime(epics.get(SubTask.getEpicsID()));
+        super.setEpicTime(epics.get(subTask.getEpicsID()));
         save();
     }
 
@@ -140,7 +142,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
                 Optional.ofNullable(task.getDescription()).orElse(""),
                 Optional.ofNullable(task.getDuration()).orElse(0L),
                 Optional.ofNullable(task.stringStartTime()).orElse(""),
-                task.getTypeTask() == TypeTask.SubTask ? SubTask.getEpicsID() : 0);
+                task.getTypeTask() == TypeTask.SubTask ? subTaskHashMap.get(task.getId()).getEpicsID() : 0);
 
         return result;
     }
@@ -223,7 +225,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
     }
 
     // Метод загрузки задач из бекапа
-    public static FileBackedTasksManager loadFromFile(File file) throws ManagerSaveException {
+    public FileBackedTasksManager loadFromFile(File file) throws ManagerSaveException {
         try {
             FileReader reader = new FileReader(file);
             BufferedReader br = new BufferedReader(reader);
@@ -256,9 +258,8 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
                 } else if (task.getTypeTask() == TypeTask.SubTask) {
                     SubTask subTask = new SubTask(task.getId(), task.getName(), task.getDescription(), task.getStatus(),
                             task.getDuration(),
-                            task.getStartTime().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")),
-                            SubTask.getEpicsID());
-                    epics.get(SubTask.getEpicsID()).getSubTasks().add(subTask.getId());
+                            task.getStartTime().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")), task.epicId );
+                    epics.get(subTask.getEpicsID()).getSubTasks().add(subTask.getId());
                     subTask.setId(task.getId());
                     subTaskHashMap.put(subTask.getId(), subTask);
                 }
@@ -282,14 +283,15 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
         file.createTask(new Task("Заплатить за квартиру", "Кварплата", StatusTask.DONE,60L, "14.06.1997 15:41"));
         file.createEpic(new Epic("Переезд", "Переезд в другую квартиру"));
         file.createEpic(new Epic("Ремонт", "Ремонт в новой квартире"));
-        file.createSubTasks(3,new SubTask("Собрать коробки","Коробки для переeзда не собраны",StatusTask.DONE,11L, "17.06.1997 15:55"));
-        file.createSubTasks(3,new SubTask("Упаковать вещи", "Вещи в коробку!", StatusTask.NEW,11L, "19.06.1997 15:41"));
-        file.createSubTasks(3,new SubTask("Сказать слова прощания", "Молитву", StatusTask.DONE,11L, "18.06.1997 15:41"));
+        file.createSubTasks(new SubTask("Собрать коробки","Коробки для переeзда не собраны",StatusTask.DONE,11L, "17.06.1997 15:55",3));
+        file.createSubTasks(new SubTask("Упаковать вещи", "Вещи в коробку!", StatusTask.NEW,11L, "19.06.1997 15:41",3));
+        file.createSubTasks(new SubTask("Сказать слова прощания", "Молитву", StatusTask.DONE,11L, "18.06.1997 15:41",3));
         file.getTaskById(1);
         file.getEpicById(3);
         file.getSubTaskById(5);
         File file1 = new File("C:\\Users\\Angelina\\dev\\java-kanban\\src\\Test\\resources\\Task.csv");
-        FileBackedTasksManager fileBackedTasksManager = loadFromFile(file1);
+        FileBackedTasksManager fileBackedTasksManager = new FileBackedTasksManager();
+        fileBackedTasksManager.loadFromFile(file1);
         System.out.println(Managers.getDefaultHistory().getHistory());
         System.out.println("");
 

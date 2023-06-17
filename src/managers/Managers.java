@@ -1,7 +1,11 @@
 package managers;
 
+import java.io.IOException;
+
 public class Managers {
-   public static HistoryManager getDefaultHistory(){
+    private static final String URL = "http://localhost:8078/";
+
+    public static HistoryManager getDefaultHistory(){
        // Возвращаем объект типа InMemoryHistoryManager
        return new InMemoryHistoryManager();
    }
@@ -10,9 +14,8 @@ public class Managers {
         return new InMemoryTaskManager() {
         };
     }
-
-    public static FileBackedTasksManager getFile(){
+    public static HttpTaskManager getFile() throws IOException, InterruptedException {
         // Возвращаем объект типа InMemoryHistoryManager
-        return new FileBackedTasksManager();
+        return new HttpTaskManager(URL);
     }
 }

@@ -24,9 +24,9 @@ class EpicTest {
         InMemoryTaskManager file = new InMemoryTaskManager();
         Epic epic = new Epic("test","test");
         file.createEpic(epic);
-        file.createSubTasks(epic.getId(),new SubTask("test","test",StatusTask.NEW));
-        file.createSubTasks(epic.getId(),new SubTask("test","test",StatusTask.NEW));
-        file.createSubTasks(epic.getId(),new SubTask("test","test",StatusTask.NEW));
+        file.createSubTasks(new SubTask("test","test",StatusTask.NEW, epic.getId()));
+        file.createSubTasks(new SubTask("test","test",StatusTask.NEW, epic.getId()));
+        file.createSubTasks(new SubTask("test","test",StatusTask.NEW, epic.getId()));
         file.updateEpicStatus(epic.getId());
         assertEquals(epic.getStatus(), StatusTask.NEW);
     }
@@ -36,9 +36,9 @@ class EpicTest {
         InMemoryTaskManager file = new InMemoryTaskManager();
         Epic epic = new Epic("test","test");
         file.createEpic(epic);
-        file.createSubTasks(epic.getId(),new SubTask("test","test",StatusTask.DONE));
-        file.createSubTasks(epic.getId(),new SubTask("test","test",StatusTask.DONE));
-        file.createSubTasks(epic.getId(),new SubTask("test","test",StatusTask.DONE));
+        file.createSubTasks(new SubTask("test","test",StatusTask.DONE, epic.getId()));
+        file.createSubTasks(new SubTask("test","test",StatusTask.DONE, epic.getId()));
+        file.createSubTasks(new SubTask("test","test",StatusTask.DONE, epic.getId()));
         file.updateEpicStatus(epic.getId());
         assertEquals(epic.getStatus() ,StatusTask.DONE);
     }
@@ -48,9 +48,9 @@ class EpicTest {
         InMemoryTaskManager file = new InMemoryTaskManager();
         Epic epic = new Epic("test","test");
         file.createEpic(epic);
-        file.createSubTasks(epic.getId(),new SubTask("test","test",StatusTask.NEW));
-        file.createSubTasks(epic.getId(),new SubTask("test","test",StatusTask.DONE));
-        file.createSubTasks(epic.getId(),new SubTask("test","test",StatusTask.IN_PROGRESS));
+        file.createSubTasks(new SubTask("test","test",StatusTask.NEW, epic.getId()));
+        file.createSubTasks(new SubTask("test","test",StatusTask.DONE, epic.getId()));
+        file.createSubTasks(new SubTask("test","test",StatusTask.IN_PROGRESS, epic.getId()));
         file.updateEpicStatus(epic.getId());
         assertEquals(epic.getStatus(),StatusTask.IN_PROGRESS);
     }
@@ -60,9 +60,9 @@ class EpicTest {
         InMemoryTaskManager file = new InMemoryTaskManager();
         Epic epic =new Epic("test","test");
         file.createEpic(epic);
-        file.createSubTasks(epic.getId(),new SubTask("test","test",StatusTask.IN_PROGRESS));
-        file.createSubTasks(epic.getId(),new SubTask("test","test",StatusTask.IN_PROGRESS));
-        file.createSubTasks(epic.getId(),new SubTask("test","test",StatusTask.IN_PROGRESS));
+        file.createSubTasks(new SubTask("test","test",StatusTask.IN_PROGRESS, epic.getId()));
+        file.createSubTasks(new SubTask("test","test",StatusTask.IN_PROGRESS, epic.getId()));
+        file.createSubTasks(new SubTask("test","test",StatusTask.IN_PROGRESS, epic.getId()));
         file.updateEpicStatus(epic.getId());
         assertEquals(epic.getStatus(),StatusTask.IN_PROGRESS);
     }

@@ -92,8 +92,8 @@ abstract class TaskManagerTest<T extends TaskManager> {
     public void testCreateSubTasks() throws ManagerSaveException {
         Epic epic = new Epic("test","test");
         manager.createEpic(epic);
-        SubTask subTask = new SubTask("test","test", StatusTask.NEW);
-        manager.createSubTasks(epic.getId(), subTask);
+        SubTask subTask = new SubTask("test","test", StatusTask.NEW, epic.getId());
+        manager.createSubTasks(subTask);
         assertNotNull(manager.getSubTaskById(subTask.getId()));
     }
 
@@ -101,8 +101,8 @@ abstract class TaskManagerTest<T extends TaskManager> {
     public void testUpdateSubTasks() throws ManagerSaveException {
         Epic epic = new Epic("test","test");
         manager.createEpic(epic);
-        SubTask subTask = new SubTask("test","test", StatusTask.NEW);
-        manager.createSubTasks(epic.getId(), subTask);
+        SubTask subTask = new SubTask("test","test", StatusTask.NEW, epic.getId());
+        manager.createSubTasks(subTask);
         subTask.setName("Updated subtask name");
         manager.updateSubTasks(subTask, subTask.getId());
         assertEquals("Updated subtask name", manager.getSubTaskById(subTask.getId()).getName());
@@ -128,8 +128,8 @@ abstract class TaskManagerTest<T extends TaskManager> {
     public void testRemoveSubTaskById() throws ManagerSaveException {
         Epic epic = new Epic("test","test");
         manager.createEpic(epic);
-        SubTask subTask = new SubTask("test","test",StatusTask.NEW);
-        manager.createSubTasks(epic.getId(), subTask);
+        SubTask subTask = new SubTask("test","test",StatusTask.NEW, epic.getId());
+        manager.createSubTasks(subTask);
         manager.removeSubTaskById(subTask.getId());
         assertNull(manager.getSubTaskById(subTask.getId()));
     }
@@ -138,8 +138,8 @@ abstract class TaskManagerTest<T extends TaskManager> {
     public void testGetAllSubTasksByEpic() throws ManagerSaveException {
         Epic epic = new Epic("test","test");
         manager.createEpic(epic);
-        SubTask subTask = new SubTask("test","test",StatusTask.NEW);
-        manager.createSubTasks(epic.getId(), subTask);
+        SubTask subTask = new SubTask("test","test",StatusTask.NEW, epic.getId());
+        manager.createSubTasks(subTask);
         assertNotNull(manager.getAllSubTasksByEpic(epic.getId()));
     }
 
@@ -147,9 +147,9 @@ abstract class TaskManagerTest<T extends TaskManager> {
     public void testUpdateEpicStatus() throws ManagerSaveException {
         Epic epic = new Epic("test","test");
         manager.createEpic(epic);
-        SubTask subTask = new SubTask("test","test",StatusTask.NEW);
+        SubTask subTask = new SubTask("test","test",StatusTask.NEW, epic.getId());
         subTask.setStatus(StatusTask.IN_PROGRESS);
-        manager.createSubTasks(epic.getId(), subTask);
+        manager.createSubTasks(subTask);
         manager.updateEpicStatus(epic.getId());
         assertEquals(StatusTask.IN_PROGRESS, manager.getEpicById(epic.getId()).getStatus());
     }

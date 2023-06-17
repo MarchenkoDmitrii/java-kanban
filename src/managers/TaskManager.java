@@ -13,11 +13,11 @@ public interface TaskManager {
     Task getTaskById(int id) throws ManagerSaveException;
     SubTask getSubTaskById(int id) throws ManagerSaveException;
     Epic getEpicById(int id) throws ManagerSaveException;
-    void createTask(Task task) throws ManagerSaveException;
+    Task createTask(Task task) throws ManagerSaveException;
     void updateTask(Task task,int id) throws ManagerSaveException;
-    void createEpic(Epic epic) throws ManagerSaveException;
+    Epic createEpic(Epic epic) throws ManagerSaveException;
     void updateEpic(Epic epic, int id) throws ManagerSaveException;
-    void createSubTasks(int epicID,SubTask subTask) throws ManagerSaveException;
+    SubTask createSubTasks(SubTask subTask) throws ManagerSaveException;
     void updateSubTasks(SubTask subTask, int id) throws ManagerSaveException;
     void removeTaskById(int id) throws ManagerSaveException;
     void removeEpicById(int id) throws ManagerSaveException;

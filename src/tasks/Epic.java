@@ -8,8 +8,7 @@ public class Epic extends Task {
 
 //    Лист с подзадачами
     private ArrayList<Integer> subTasks;
-    private Long duration;
-    private LocalDateTime startTime;
+
     public Epic(String name, String description) {
         super(name, description);
         this.setStatus(StatusTask.NEW);
@@ -25,28 +24,13 @@ public class Epic extends Task {
         subTasks = new ArrayList<>();
     }
 
-    @Override
-    public Long getDuration() {
-        return duration;
-    }
-
-    @Override
-    public void setDuration(Long duration) {
-        this.duration = duration;
-    }
-
-    @Override
-    public LocalDateTime getStartTime() {
-        return startTime;
-    }
-
     public void setStartTime(LocalDateTime startTime) {
         this.startTime = startTime;
     }
 
 
     public String stringStartTime() {
-        return startTime == null ? "" : startTime.format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"));
+        return getStartTime() == null ? "" : getStartTime().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"));
     }
 
     public ArrayList<Integer> getSubTasks() {
