@@ -1,15 +1,12 @@
-package Test;
+package test;
 
 import managers.HistoryManager;
 import managers.InMemoryHistoryManager;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import tasks.StatusTask;
 import tasks.Task;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;

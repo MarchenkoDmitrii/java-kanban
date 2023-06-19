@@ -1,10 +1,7 @@
-package Test;
+package test;
 
-import KVServer.KVServer;
-import managers.FileBackedTasksManager;
+import kvserver.KVServer;
 import managers.HttpTaskManager;
-import managers.ManagerSaveException;
-import managers.Managers;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import tasks.Epic;
@@ -12,7 +9,6 @@ import tasks.StatusTask;
 import tasks.SubTask;
 import tasks.Task;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 

@@ -1,6 +1,6 @@
 package managers;
 
-import KVServer.KVTaskClient;
+import kvserver.KVTaskClient;
 import com.google.gson.Gson;
 import tasks.Epic;
 import tasks.SubTask;
@@ -12,7 +12,6 @@ import java.net.URISyntaxException;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Objects;
 
 public class HttpTaskManager extends FileBackedTasksManager implements TaskManager {
     Gson gson = new Gson();

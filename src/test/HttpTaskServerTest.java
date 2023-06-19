@@ -1,4 +1,4 @@
-package Test;
+package test;
 
 
 import com.google.gson.Gson;
@@ -25,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class HttpTaskServerTest {
     private static final String URL = "http://localhost:8080/";
-    HttpClient client = HttpClient.newHttpClient();
+    private HttpClient client = HttpClient.newHttpClient();
     InMemoryTaskManager taskManager = new InMemoryTaskManager();
 
     Gson gson = new Gson();
@@ -33,15 +33,15 @@ class HttpTaskServerTest {
     @BeforeEach
     public void initData() throws IOException, InterruptedException {
 
-        sendPostRequest(taskManager.createTask(new Task("Task 1","Test")));
-        sendPostRequest(taskManager.createTask(new Task("Task 2","Test")));
-        sendPostRequest(taskManager.createTask(new Task("Task 3","Test")));
+        sendPostRequest(taskManager.createTask(new Task("Task 1", "test")));
+        sendPostRequest(taskManager.createTask(new Task("Task 2", "test")));
+        sendPostRequest(taskManager.createTask(new Task("Task 3", "test")));
 
     }
 
     @Test
     public void testPost() throws IOException, InterruptedException {
-        HttpResponse<String> response = sendPostRequest(taskManager.createTask(new Task("Task 4","Test")));
+        HttpResponse<String> response = sendPostRequest(taskManager.createTask(new Task("Task 4", "test")));
         assertEquals(201, response.statusCode());
         response = sendGetRequest();
         assertEquals(200, response.statusCode());

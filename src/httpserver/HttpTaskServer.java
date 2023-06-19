@@ -1,6 +1,6 @@
-package Server;
+package httpserver;
 
-import Handlers.*;
+import handlers.*;
 import com.sun.net.httpserver.HttpServer;
 
 import java.net.InetSocketAddress;
