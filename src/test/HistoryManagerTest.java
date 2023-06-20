@@ -44,8 +44,8 @@ class HistoryManagerTest {
     }
     @Test
     public void testRemoveFromBeginning() {
-        Task task1 = new Task("test1","test1");
-        Task task2 = new Task("test2","test2");
+        Task task1 = new Task("test1", "test1");
+        Task task2 = new Task("test2", "test2");
         manager.add(task1);
         manager.add(task2);
         manager.remove(task1.getId());
@@ -56,9 +56,9 @@ class HistoryManagerTest {
 
     @Test
     public void testRemoveFromMiddle() {
-        Task task1 = new Task("test","test");
-        Task task2 = new Task("test","test");
-        Task task3 = new Task("test","test");
+        Task task1 = new Task("test", "test");
+        Task task2 = new Task("test", "test");
+        Task task3 = new Task("test", "test");
         manager.add(task1);
         manager.add(task2);
         manager.add(task3);
@@ -71,8 +71,8 @@ class HistoryManagerTest {
 
     @Test
     public void testRemoveFromEnd() {
-        Task task1 = new Task("test","test");
-        Task task2 = new Task("test","test");
+        Task task1 = new Task("test", "test");
+        Task task2 = new Task("test", "test");
         manager.add(task1);
         manager.add(task2);
         manager.remove(task2.getId());

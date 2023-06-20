@@ -13,14 +13,14 @@ class EpicTest {
 
     @Test
     void testStatusEmptySubTasks() throws ManagerSaveException {
-        Epic epic = new Epic("test","test");
+        Epic epic = new Epic("test", "test");
         assertEquals(epic.getStatus(),StatusTask.NEW);
     }
 
     @Test
     void testStatusAllSubTasksNew() throws ManagerSaveException {
         InMemoryTaskManager file = new InMemoryTaskManager();
-        Epic epic = new Epic("test","test");
+        Epic epic = new Epic("test", "test");
         file.createEpic(epic);
         file.createSubTasks(new SubTask("test","test",StatusTask.NEW, epic.getId()));
         file.createSubTasks(new SubTask("test","test",StatusTask.NEW, epic.getId()));
@@ -32,11 +32,11 @@ class EpicTest {
     @Test
     void testStatusAllSubTasksDone() throws ManagerSaveException {
         InMemoryTaskManager file = new InMemoryTaskManager();
-        Epic epic = new Epic("test","test");
+        Epic epic = new Epic("test", "test");
         file.createEpic(epic);
-        file.createSubTasks(new SubTask("test","test",StatusTask.DONE, epic.getId()));
-        file.createSubTasks(new SubTask("test","test",StatusTask.DONE, epic.getId()));
-        file.createSubTasks(new SubTask("test","test",StatusTask.DONE, epic.getId()));
+        file.createSubTasks(new SubTask("test", "test", StatusTask.DONE, epic.getId()));
+        file.createSubTasks(new SubTask("test", "test", StatusTask.DONE, epic.getId()));
+        file.createSubTasks(new SubTask("test", "test",StatusTask.DONE, epic.getId()));
         file.updateEpicStatus(epic.getId());
         assertEquals(epic.getStatus() ,StatusTask.DONE);
     }
@@ -44,11 +44,11 @@ class EpicTest {
     @Test
     void testStatusMixedSubTasks() throws ManagerSaveException {
         InMemoryTaskManager file = new InMemoryTaskManager();
-        Epic epic = new Epic("test","test");
+        Epic epic = new Epic("test", "test");
         file.createEpic(epic);
-        file.createSubTasks(new SubTask("test","test",StatusTask.NEW, epic.getId()));
-        file.createSubTasks(new SubTask("test","test",StatusTask.DONE, epic.getId()));
-        file.createSubTasks(new SubTask("test","test",StatusTask.IN_PROGRESS, epic.getId()));
+        file.createSubTasks(new SubTask("test", "test", StatusTask.NEW, epic.getId()));
+        file.createSubTasks(new SubTask("test", "test", StatusTask.DONE, epic.getId()));
+        file.createSubTasks(new SubTask("test", "test", StatusTask.IN_PROGRESS, epic.getId()));
         file.updateEpicStatus(epic.getId());
         assertEquals(epic.getStatus(),StatusTask.IN_PROGRESS);
     }
@@ -56,13 +56,13 @@ class EpicTest {
     @Test
     void testStatusInProgressSubTasks() throws ManagerSaveException {
         InMemoryTaskManager file = new InMemoryTaskManager();
-        Epic epic =new Epic("test","test");
+        Epic epic =new Epic("test", "test");
         file.createEpic(epic);
-        file.createSubTasks(new SubTask("test","test",StatusTask.IN_PROGRESS, epic.getId()));
-        file.createSubTasks(new SubTask("test","test",StatusTask.IN_PROGRESS, epic.getId()));
-        file.createSubTasks(new SubTask("test","test",StatusTask.IN_PROGRESS, epic.getId()));
+        file.createSubTasks(new SubTask("test", "test", StatusTask.IN_PROGRESS, epic.getId()));
+        file.createSubTasks(new SubTask("test", "test", StatusTask.IN_PROGRESS, epic.getId()));
+        file.createSubTasks(new SubTask("test", "test", StatusTask.IN_PROGRESS, epic.getId()));
         file.updateEpicStatus(epic.getId());
-        assertEquals(epic.getStatus(),StatusTask.IN_PROGRESS);
+        assertEquals(epic.getStatus(), StatusTask.IN_PROGRESS);
     }
 
 }

@@ -50,20 +50,21 @@ public class TaskHandler implements HttpHandler {
         String[] params = query.split("=");
         int id = Integer.parseInt(params[1]);
         taskManager.removeTaskById(id);
-        writeResponse(exchange,"Удалено",200);
+        writeResponse(exchange, "Удалено",200);
     }
 
     public void getTask(HttpExchange exchange) throws IOException{
         String query = exchange.getRequestURI().getQuery();
         String[] params = query.split("=");
         int id = Integer.parseInt(params[1]);
-        writeResponse(exchange,gson.toJson(taskManager.getTaskById(id)),200);
+        writeResponse(exchange,gson.toJson(taskManager.getTaskById(id)), 200);
     }
     public void createTask(HttpExchange exchange) throws IOException{
         InputStream requestBody = exchange.getRequestBody();
         String requestBodyString = new String(requestBody.readAllBytes(), StandardCharsets.UTF_8);
         try {
-            writeResponse(exchange,gson.toJson(taskManager.createTask(gson.fromJson(requestBodyString,Task.class))),200);
+            writeResponse(exchange,gson.toJson(taskManager.createTask(gson
+                    .fromJson(requestBodyString,Task.class))),200);
         }catch (JsonSyntaxException e){
             writeResponse(exchange, "Некорректный формат JSON", 400);
         }

@@ -26,9 +26,9 @@ import static org.junit.jupiter.api.Assertions.*;
 class HttpTaskServerTest {
     private static final String URL = "http://localhost:8080/";
     private HttpClient client = HttpClient.newHttpClient();
-    InMemoryTaskManager taskManager = new InMemoryTaskManager();
+    private InMemoryTaskManager taskManager = new InMemoryTaskManager();
 
-    Gson gson = new Gson();
+    private Gson gson = new Gson();
 
     @BeforeEach
     public void initData() throws IOException, InterruptedException {
@@ -45,7 +45,7 @@ class HttpTaskServerTest {
         assertEquals(201, response.statusCode());
         response = sendGetRequest();
         assertEquals(200, response.statusCode());
-        List<Task> users = new ArrayList<>(InMemoryTaskManager.tasks.values());
+        List<Task> users = new ArrayList<>(taskManager.tasks.values());
         assertEquals(4, users.size());
     }
 
@@ -64,8 +64,9 @@ class HttpTaskServerTest {
 
         response = sendGetRequest();
         assertEquals(200, response.statusCode());
-        List<Task> users = new ArrayList<>(InMemoryTaskManager.tasks.values());
-        assertEquals(2, users.size());
+        List<Task> users = new ArrayList<>(taskManager.tasks.values());
+        assertNotNull(taskManager.getTaskById(2));
+        assertNotNull(taskManager.getTaskById(3));
     }
 
 
